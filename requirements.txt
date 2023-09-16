@@ -1,5 +1,5 @@
-matplotlib==3.8.0
-pandas_datareader==0.10.0
-yfinance==0.2.28
-keras==2.14.0
+matplotlib
+pandas_datareader
+yfinance
+keras
 tensorflow
