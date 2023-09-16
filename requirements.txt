@@ -3,3 +3,4 @@ pandas_datareader
 yfinance
 keras
 tensorflow
+scikit-learn
