@@ -27,25 +27,25 @@ st.write(df.describe())
 #Plotting a simple closing price chart
 st.subheader('Closing Price in Dollars vs Time chart')
 fig = plt.figure(figsize = (12, 6), dpi = 100)
-plt.plot(df.Close, 'b')
+plt.plot(df['Close'], 'b')
 st.pyplot(fig)
 
 #100 Moving Average
 st.subheader('Closing Price vs Time chart with 100MA')
-ma100 = df.Close.rolling(100).mean()
+ma100 = df['Close'].rolling(100).mean()
 fig = plt.figure(figsize = (12,6))
 plt.plot(ma100, 'r')
-plt.plot(df.Close, 'b')
+plt.plot(df['Close'], 'b')
 st.pyplot(fig)
 
 #200 Moving Average
 st.subheader('Closing Price vs Time chart with 100MA & 200MA')
-ma100 = df.Close.rolling(100).mean()
-ma200 = df.Close.rolling(200).mean()
+ma100 = df['Close'].rolling(100).mean()
+ma200 = df['Close'].rolling(200).mean()
 fig = plt.figure(figsize = (12,6))
 plt.plot(ma100, 'r')
 plt.plot(ma200, 'g')
-plt.plot(df.Close, 'b')
+plt.plot(df['Close'], 'b')
 st.pyplot(fig)
 
 #Splitting data into training and testing
@@ -59,7 +59,7 @@ def custom_min_max_scaler(data):
   scaled_data = [(x - min_val) / (max_val - min_val) for x in data]
   return scaled_data
 
-data_training_array = custom_min_max_scaler(data_training['Close'].tolist())
+data_training_array = custom_min_max_scaler(data_training.tolist())
 
 #loading the model
 model = load_model('Stock_Predictor_Model.h5')
@@ -67,7 +67,7 @@ model = load_model('Stock_Predictor_Model.h5')
 #testing
 past_100_days = data_training.tail(100)
 final_df = pd.concat([past_100_days, data_testing], ignore_index=True)
-input_data = custom_min_max_scaler(final_df['Close'].tolist())
+input_data = custom_min_max_scaler(final_df.tolist())
 
 x_test = []
 y_test = []
@@ -82,14 +82,14 @@ x_test, y_test = x_test, y_test
 y_predicted = model.predict(x_test)
 
 # Scaling back to original values
-min_val = min(data_training['Close'])
-max_val = max(data_training['Close'])
+min_val = min(data_training)
+max_val = max(data_training)
 scale_factor = max_val - min_val
 
 y_predicted = [y * scale_factor + min_val for y in y_predicted]
 y_test = [y * scale_factor + min_val for y in y_test]
 
-#final graph
+# Final graph
 st.subheader('Predictions vs original')
 fig2 = plt.figure(figsize=(12,6))
 plt.plot(y_test, 'b', label = 'Original Price')
