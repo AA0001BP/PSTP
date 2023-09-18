@@ -58,9 +58,11 @@ data_training_array = custom_min_max_scaler(data_training.tolist())
 model = load_model('Stock_Predictor_Model.h5')
 
 #testing
+
+#using python lists for data manipulation
 past_100_days = data_training.tail(100)
-final_df = pd.concat([past_100_days, data_testing], ignore_index=True)
-input_data = custom_min_max_scaler(final_df.tolist())
+final_df = past_100_days.tolist() + data_testing.tolist()
+input_data = custom_min_max_scaler(final_df)
 
 x_test = []
 y_test = []
@@ -68,8 +70,6 @@ y_test = []
 for i in range(100, len(input_data)):
     x_test.append(input_data[i - 100:i])
     y_test.append(input_data[i])
-
-x_test, y_test = x_test, y_test
 
 # Predictions
 y_predicted = model.predict(x_test)
