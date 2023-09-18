@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pandas_datareader as data
@@ -17,7 +16,7 @@ user_input_start_date = st.text_input('Enter starting date in a format "yyyy-mm-
 user_input_end_date = st.text_input('Enter end date in a format "yyyy-mm-dd": ')
 st.divider()
 
-df = pdr.get_data_yahoo(user_input_symbol, user_input_start_date, user_input_end_date)
+df = yf.download(user_input_symbol, start=user_input_start_date, end=user_input_end_date)
 
 #Describing data
 st.subheader('Data from ' + user_input_start_date + " to " + user_input_end_date)
