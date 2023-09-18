@@ -1,4 +1,7 @@
+import pandas as pd
 import matplotlib.pyplot as plt
+import pandas_datareader as data
+from pandas_datareader import data as pdr
 import yfinance as yf
 from keras.models import load_model
 import streamlit as st
