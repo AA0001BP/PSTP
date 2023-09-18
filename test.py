@@ -49,8 +49,8 @@ plt.plot(df.Close, 'b')
 st.pyplot(fig)
 
 #Splitting data into training and testing
-data_training = pd.DataFrame(df['Close'][0:int(len(df)*0.7)])
-data_testing = pd.DataFrame(df['Close'][int(len(df)*0.7):int(len(df))])
+data_training = df['Close'][:int(len(df) * 0.7)]
+data_testing = df['Close'][int(len(df) * 0.7):]
 
 #scaling function
 def custom_min_max_scaler(data):
