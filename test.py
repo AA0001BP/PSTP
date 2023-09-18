@@ -53,11 +53,14 @@ st.pyplot(fig)
 data_training = pd.DataFrame(df['Close'][0:int(len(df)*0.7)])
 data_testing = pd.DataFrame(df['Close'][int(len(df)*0.7):int(len(df))])
 
-#scaling
-from sklearn.preprocessing import MinMaxScaler
-scaler = MinMaxScaler(feature_range=(0,1))
+#scaling function
+def custom_min_max_scaler(data):
+  min_val = min(data)
+  max_val = max(data)
+  scaled_data = [(x - min_val) / (max_val - min_val) for x in data]
+  return scaled_data
 
-data_training_array = scaler.fit_transform(data_training)
+data_training_array = custom_min_max_scaler(data_training['Close'].tolist())
 
 #loading the model
 model = load_model('Stock_Predictor_Model.h5')
@@ -65,25 +68,27 @@ model = load_model('Stock_Predictor_Model.h5')
 #testing
 past_100_days = data_training.tail(100)
 final_df = pd.concat([past_100_days, data_testing], ignore_index=True)
-input_data = scaler.fit_transform(final_df)
+input_data = custom_min_max_scaler(final_df['Close'].tolist())
 
 x_test = []
 y_test = []
 
-for i in range(100, input_data.shape[0]):
-  x_test.append(input_data[i-100:i])
-  y_test.append(input_data[i, 0])
+for i in range(100, len(input_data)):
+    x_test.append(input_data[i - 100:i])
+    y_test.append(input_data[i])
 
-x_test, y_test = np.array(x_test), np.array(y_test)
+x_test, y_test = x_test, y_test
 
-#predictions
+# Predictions
 y_predicted = model.predict(x_test)
 
-data_scaler = scaler.scale_
+# Scaling back to original values
+min_val = min(data_training['Close'])
+max_val = max(data_training['Close'])
+scale_factor = max_val - min_val
 
-scale_factor = 1/data_scaler[0]
-y_predicted = y_predicted * scale_factor
-y_test = y_test * scale_factor
+y_predicted = [y * scale_factor + min_val for y in y_predicted]
+y_test = [y * scale_factor + min_val for y in y_test]
 
 #final graph
 st.subheader('Predictions vs original')
