@@ -1,7 +1,4 @@
-import pandas as pd
 import matplotlib.pyplot as plt
-import pandas_datareader as data
-from pandas_datareader import data as pdr
 import yfinance as yf
 from keras.models import load_model
 import streamlit as st
@@ -17,10 +14,6 @@ user_input_end_date = st.text_input('Enter end date in a format "yyyy-mm-dd": ')
 st.divider()
 
 df = yf.download(user_input_symbol, start=user_input_start_date, end=user_input_end_date)
-
-#Describing data
-st.subheader('Data from ' + user_input_start_date + " to " + user_input_end_date)
-st.write(df.describe())
 
 #Visualizations
 
