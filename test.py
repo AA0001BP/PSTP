@@ -3,8 +3,6 @@ import yfinance as yf
 from keras.models import load_model
 import streamlit as st
 
-#yf.pdr_override()
-
 st.title('PSTP: Pepperoni Stock Trend Predictor')
 st.caption("To restart - press :violet[R]")
 st.divider()
