@@ -3,3 +3,4 @@ yfinance
 keras
 tensorflow
 scikit-learn
+newsapi-python
