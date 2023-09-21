@@ -89,3 +89,28 @@ plt.xlabel('Time')
 plt.ylabel('Price')
 plt.legend()
 st.pyplot(fig2)
+
+
+#--- NEWS AGGREGATOR ---#
+
+from newsapi import NewsApiClient
+import streamlit as st
+
+api = NewsApiClient(api_key='9efcc41031a041c49a6b9f72df29194d')
+
+st.header("News related to the company")
+user_input_stock = st.text_input('Enter the name of the company: ')
+number_of_articles = st.selectbox("How many articles would you like to see", (3, 5, 10, 20, 50), label_visibility="visible")
+response_data = api.get_everything(qintitle=user_input_stock, sources="the-wall-street-journal, fortune, australian-financial-review, bloomberg, business-insider, business-insider-uk, financial-post", sort_by="popularity", language="en", page_size=number_of_articles)
+
+for article in response_data['articles']:
+    st.subheader(article['title'])
+    st.caption(article['source']['name'] + "  •  " + article['publishedAt'][:10])
+    st.markdown(f'''
+<a href={article['url']}><button style="background-color:#FF33E9;">Open the article</button></a>
+''',
+unsafe_allow_html=True)
+
+
+# CAPTION
+st.caption("Pepperoni Stock Trend Predictor would like to remind you that the data contained on this website and via API might not necessarily be real-time nor accurate. All prices may differ from the actual market price, meaning prices are indicative and not appropriate for trading purposes. Therefore, Pepperoni Stock Trend Predictor does not bear any responsibility for any trading losses user might incur as a result of using this data. Pepperoni Stock Trend Predictor or anyone involved with it will not accept any liability for loss or damage as a result of reliance on the information contained within this website. Please be fully informed regarding the risks and costs associated with trading the financial markets. Pepperoni Stock Trend Predictor does not give any warranties (including, without limitation, as to merchantability or fitness for a particular purpose or use). Please note that the historical returns summaries provided on this website are based on past prices and are not a guarantee or indication of future returns. It is important to understand that past performance is not necessarily indicative of future results, and that investing carries inherent risks. It is important to carefully consider your own financial situation and risk tolerance before making any investment decisions.")
